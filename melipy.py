@@ -178,7 +178,7 @@ def replaceUnit(x):
         result = None
     
     return result
-    
+
 # PROGRAMA
 
 def run():
@@ -198,7 +198,7 @@ def run():
 
     pages = pagesTotal(url, q)
 
-    print(f'\n Start scrapper of {q} pages with 48 products (total: {q*48}): {start}\n')
+    print(f'\n Start scrapper of {q} pages with 48 products (total: {q*48})\n')
     
     bar = ChargingBar('Scrapeando pagina:', max=q)
 
