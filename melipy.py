@@ -159,6 +159,26 @@ def transformProducts(df):
 
     return df
 
+def replaceOFF(x):  
+    try:
+        result = int(x.replace('% OFF',''))/100
+    except AttributeError:
+        result = None
+    
+    return result
+
+def replaceUnit(x):  
+    try:
+        stag = x.replace('$','')
+        result = int(stag.replace('.',''))
+        
+    except AttributeError:
+        result = None
+    except ValueError:
+        result = None
+    
+    return result
+    
 # PROGRAMA
 
 def run():
