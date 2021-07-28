@@ -15,11 +15,10 @@ def load_data(name, data_clean):
     #CONSULTO LA HORA DEL SISTEMA, NOMBRO EL ARCHIVO FINAL Y CREO LA RUTA DEL ARCHIVO POR USUARIO    
     date = datetime.now().strftime('%Y_%m_%d')
     file_name = f'\{name}_{date}.csv'
-    path_desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop\meli_scrapper\result')
+    path_desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop/meli_scrapper/result')
     path_file = path_desktop + file_name
 
-    if os.path.isdir(path_desktop):
-        print(f'loading data in {file_name}....' )     
+    if os.path.isdir(path_desktop): 
         data_clean.to_csv(path_file, mode='a', header=False, index=False)
     else: 
         os.mkdir(path_desktop)
@@ -155,7 +154,7 @@ def transformProducts(df):
 def run():
 
     #INICIA EL BOT
-    print('\n ############### MELI_SCRAPPER ############### \n\n')
+    print('\n ############### MELI_SCRAPPER ############### \n')
     start = datetime.now()
 
     print(f'\n Start of the process: {start}\n')
@@ -174,7 +173,7 @@ def run():
     bar = ChargingBar('Scrapeando pagina:', max=q)
 
     for pag in pages:
-        sleep(random.randint(5,30))
+        sleep(random.randint(5,20))
         response = requests.get(pag)
         soup_response = BeautifulSoup(response.text, 'lxml')
         test_list = soup_response.find_all('li', attrs={'class':'promotion-item'})
