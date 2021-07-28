@@ -73,7 +73,7 @@ def scraper_product(prod_pag):
 
         ## PRECIO CON DESCUENTO
         try:
-            dict_prod['price_discount'] = prod_pag[n].find('span', attrs={'class':'promotion-item__price'}).get_text()
+            dict_prod['price_discount'] = prod_pag[n].find('span', attrs={'class':'promotion-item__price'}).span.get_text()
         except AttributeError:
             dict_prod['price_discount'] = None
 
@@ -91,7 +91,10 @@ def scraper_product(prod_pag):
 
         ## imagen principal del producto
         try:
-            dict_prod['picture'] = prod_pag[n].img.get('data-src')
+            if n<=5:
+                dict_prod['picture'] = prod_pag[n].img.get('src')
+            else:
+                dict_prod['picture'] = prod_pag[n].img.get('data-src')
         except AttributeError:
             dict_prod['picture'] = None
 
@@ -146,6 +149,13 @@ def transformProducts(df):
 
     #ELIMINO 'Por ' DE LOS VENDEDORES
     df['seller'] = df['seller'].apply(lambda x: deletePor(x))
+
+    #CREO UN CAMPO SIN '% OFF' DE LOS DESCUENTOS
+    df['discount'] = df['discount_por'].apply(lambda x: replaceOFF(x))
+
+    #CREO CAMPOS SIN '$' Y '.' DE LOS PRECIOS
+    df['price_clean'] = df['price'].apply(lambda x: replaceUnit(x))
+    df['price_discount_clean'] = df['price_discount'].apply(lambda x: replaceUnit(x))   
 
     return df
 
