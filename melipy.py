@@ -213,7 +213,7 @@ def run():
         bar.next()
     
     end = datetime.now()
-    print(f'\nEnd of the process: {end}')
+    print(f'\n\nEnd of the process: {end}')
     print(f'\nDuration of the process: {end - start}\n')   
     
     bar.finish() 
