@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from pandas import DataFrame
 from datetime import datetime
-# import pandas as pd
+import pandas as pd
 import os
 from time import sleep
 import random
@@ -118,6 +118,49 @@ def pagesTotal(url, cantidad):
         
     return list
 
+def getReview(list_products):
+
+    q = len(list_products)
+    print(f'\n Start search review for {q} products\n')
+    list = []
+
+    bar = ChargingBar('Search review:', max=q)
+
+    for i in list_products:
+        sleep(random.randint(1,5))
+        dict = {}
+        url_review = f'https://www.mercadolibre.com.ar/noindex/catalog/reviews/MLA{i}'
+        response = requests.get(url_review)
+        soup_response = BeautifulSoup(response.text, 'lxml')
+
+        ## PRODUCT SCORE
+        try:
+            score = soup_response.find('div', attrs={'class':'big-score'})
+            dict['review_score'] = float(score.h1.get_text())
+        except AttributeError:
+            dict['review_score'] = None
+
+        try:
+            dict['review_count']  = soup_response.find('div', attrs={'class':'total-reviews'}).span.get_text()
+        except AttributeError:
+            dict['review_count'] = None
+
+        try:
+            dict['review_url'] = url_review
+        except AttributeError:
+            dict['review_url'] = None
+
+        try:
+            dict['product_id'] = i
+        except AttributeError:
+            dict['product_id'] = None
+        
+        dict['review_download'] = datetime.now() 
+        
+        list.append(dict) 
+        load_data('review_meli', DataFrame(list))
+        bar.next()
+
 # FUNCIONES DE TRANSFORMACION DE DATOS
 
 def deletePor(x):  
@@ -209,8 +252,13 @@ def run():
         test_list = soup_response.find_all('li', attrs={'class':'promotion-item'})
         result = scraper_product(test_list)
         df = transformProducts(DataFrame(result))
-        load_data('Ofertas_meli', df) 
+        path_data = load_data('Ofertas_meli', df) 
         bar.next()
+
+    # path_data = 'C:/Users/Luis/Desktop/meli_scrapper/result/Ofertas_meli_2021_07_27.csv'
+    # df = pd.read_csv(path_data)
+    # list_products = df['product_id'].unique()
+    # getReview(list_products)
     
     end = datetime.now()
     print(f'\n\nEnd of the process: {end}')
