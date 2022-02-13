@@ -15,7 +15,9 @@ def load_data(name, data_clean):
     #CONSULTO LA HORA DEL SISTEMA, NOMBRO EL ARCHIVO FINAL Y CREO LA RUTA DEL ARCHIVO POR USUARIO    
     date = datetime.now().strftime('%Y_%m_%d')
     file_name = f'\{name}_{date}.csv'
-    path_desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop/meli_scrapper/result')
+
+# os.path.expanduser('~')
+    path_desktop = os.path.join(os.path.join(os.environ['HOME']), 'Documents/projects/meli_pipeline/result')
     path_file = path_desktop + file_name
 
     if os.path.isdir(path_desktop): 
