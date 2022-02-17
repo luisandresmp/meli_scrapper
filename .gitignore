@@ -6,6 +6,10 @@ __pycache__/
 # Resultados del scrapper
 result/
 
+#secrets
+*.yaml
+*.json
+
 # C extensions
 *.so
 

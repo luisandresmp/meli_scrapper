@@ -7,6 +7,37 @@ import os
 from time import sleep
 import random
 from progress.bar import ChargingBar
+from pydrive2.auth import GoogleAuth
+from pydrive2.drive import GoogleDrive
+
+# FUNCIONES DE CONEXION
+
+#Variables para proceso de archivos de google drive
+directorio_credenciales = '/home/luisandresmp/Documents/projects/meli_pipeline/credentials_module.json'
+# folder_campanias='10oTAe6_rPQW_sC7hA0BmrgYhEh5xnxYP'
+
+# INICIAR SESION GOOGLE DRIVE
+def login():
+    gauth = GoogleAuth()
+    gauth.LoadCredentialsFile(directorio_credenciales)
+
+    if gauth.access_token_expired:
+        gauth.Refresh()
+        gauth.SaveCredentialsFile(directorio_credenciales)
+    else:
+        gauth.Authorize()
+
+    return GoogleDrive(gauth)
+
+#sube archivo a GOOGLE DRIVE
+def sube_archivo_a_drive (ruta_archivo, id_folder):
+    credenciales = login()
+    archivo = credenciales.CreateFile({'parents': [{"kind": "drive#fileLink",\
+                                                    "id": id_folder}]})
+    archivo['title'] = ruta_archivo.split("/")[-1]
+    archivo.SetContentFile(ruta_archivo) # error
+    archivo.Upload()
+    print("Archivo subido a drive")
 
 # FUNCIONES PARA GUARDAR INFORMACION
 
@@ -269,4 +300,11 @@ def run():
     bar.finish() 
         
 if __name__=='__main__':
-    run()
+    # run()
+
+    folder_melisales = '1OHMZhALGPHP75fypDFVMckI9S7sORL9m'
+    file = '/home/luisandresmp/Documents/projects/meli_pipeline/result/Ofertas_meli_2022_02_13.csv' 
+
+    # archivo sobre escribir archivo cargar nuevos registros con python
+
+    sube_archivo_a_drive( file, folder_melisales)
