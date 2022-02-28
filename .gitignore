@@ -10,6 +10,10 @@ result/
 *.yaml
 *.json
 
+# desa
+*.ipynb
+tareas.txt
+
 # C extensions
 *.so
 
